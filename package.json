@@ -1,0 +1,29 @@
+{
+    "name": "panel-deploy",
+    "version": "1.0.0",
+    "description": "Panel deploy otomatis berbasis Docker untuk deploy aplikasi dari GitHub/GitLab",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js",
+        "setup": "node setup.js",
+        "dev": "node --watch server.js"
+    },
+    "keywords": [
+        "paas",
+        "deploy",
+        "docker",
+        "panel",
+        "nodejs"
+    ],
+    "author": "pySmartDL",
+    "license": "MIT",
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "dotenv": "^16.4.5",
+        "express": "^4.19.2",
+        "jsonwebtoken": "^9.0.2"
+    },
+    "engines": {
+        "node": ">=22.5.0"
+    }
+}
