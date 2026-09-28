@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title id="pageTitle">Panel-Deploy</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:#0a1a4a;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(212,175,55,.18), transparent 42%),
+    radial-gradient(circle at 88% 92%, rgba(212,175,55,.14), transparent 42%),
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,.6), transparent 70%),
+    linear-gradient(135deg,#faf7f0 0%,#f2ead6 35%,#f7f1e2 65%,#faf7f0 100%);
+  background-attachment:fixed;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+button,input,a,textarea{font-family:inherit;font-size:inherit;color:inherit;border:none;background:none;outline:none;text-decoration:none}
+button{cursor:pointer}
+pre,code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+.hidden{display:none!important}
+.flex{display:flex}.grid{display:grid}
+.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}
+.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.flex-1{flex:1}
+.gap-1{gap:4px}.gap-2{gap:8px}.gap-3{gap:12px}.gap-4{gap:16px}
+.text-xs{font-size:11px}.text-sm{font-size:13px}.text-base{font-size:14px}.text-lg{font-size:17px}.text-xl{font-size:20px}
+.font-bold{font-weight:700}.font-black{font-weight:900}
+.text-center{text-align:center}.text-white{color:#fff}.text-black{color:#000}
+.text-red{color:#dc2626}.text-green{color:#10b981}
+.w-full{width:100%}.min-h-screen{min-height:100vh}.max-w-5xl{max-width:1024px}
+.mx-auto{margin-left:auto;margin-right:auto}
+.mt-1{margin-top:4px}.mt-2{margin-top:8px}.mt-3{margin-top:12px}.mt-4{margin-top:16px}.mt-5{margin-top:20px}.mt-6{margin-top:24px}
+.mb-1{margin-bottom:4px}.mb-2{margin-bottom:8px}.mb-3{margin-bottom:12px}.mb-4{margin-bottom:16px}.mb-5{margin-bottom:20px}
+.p-2{padding:8px}.p-3{padding:12px}.p-4{padding:16px}.p-5{padding:20px}.p-6{padding:24px}.p-8{padding:32px}.p-9{padding:36px}
+.px-3{padding-left:12px;padding-right:12px}.px-4{padding-left:16px;padding-right:16px}.px-5{padding-left:20px;padding-right:20px}.px-6{padding-left:24px;padding-right:24px}
+.py-2{padding-top:8px;padding-bottom:8px}.py-3{padding-top:12px;padding-bottom:12px}.py-4{padding-top:16px;padding-bottom:16px}.py-5{padding-top:20px;padding-bottom:20px}
+.rounded-lg{border-radius:8px}.rounded-xl{border-radius:12px}.rounded-2xl{border-radius:16px}.rounded-3xl{border-radius:24px}.rounded-full{border-radius:999px}
+.overflow-auto{overflow:auto}.overflow-hidden{overflow:hidden}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.relative{position:relative}
+.glass-blue{
+  background:linear-gradient(180deg,rgba(255,255,255,.99),rgba(252,248,240,.99));
+  backdrop-filter:blur(24px);
+  border:1px solid rgba(212,175,55,.45);
+  box-shadow:
+    0 30px 80px rgba(10,26,74,.18),
+    0 0 0 1px rgba(255,255,255,.9) inset,
+    0 0 80px rgba(212,175,55,.15);
+}
+.glass-white{background:rgba(255,255,255,.99);border:1px solid rgba(212,175,55,.35);box-shadow:0 20px 60px rgba(10,26,74,.1),0 0 0 1px rgba(255,255,255,.6) inset}
+.gold{background:linear-gradient(135deg,#b8860b,#d4af37,#f6e27a,#d4af37);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.bg-gold{background:linear-gradient(135deg,#d4af37,#f6e27a);box-shadow:0 4px 16px rgba(212,175,55,.35)}
+.bg-blue{background:linear-gradient(135deg,#0a1a4a,#1e4db7)}
+.inp{background:#fff;border:1px solid rgba(212,175,55,.35);border-radius:16px;padding:14px 16px;font-size:13px;color:#0a1a4a;width:100%;transition:all .2s;box-shadow:0 2px 8px rgba(10,26,74,.04) inset}
+.inp::placeholder{color:rgba(10,26,74,.35)}
+.inp:focus{border-color:#d4af37;box-shadow:0 0 0 3px rgba(212,175,55,.18)}
+.pinp{background:#fff;border:1px solid rgba(10,26,74,.1);border-radius:10px;padding:10px 14px;font-size:13px;color:#0a1a4a;width:100%;transition:border-color .15s}
+.pinp::placeholder{color:rgba(10,26,74,.35)}
+.pinp:focus{border-color:#d4af37;background:#fff;box-shadow:0 0 0 3px rgba(212,175,55,.15)}
+.btn-login-gold{width:100%;background:linear-gradient(135deg,#d4af37,#f6e27a);color:#0a1a4a;padding:14px;border-radius:16px;font-weight:900;font-size:13px;margin-top:8px;box-shadow:0 6px 20px rgba(212,175,55,.4);letter-spacing:.5px}
+.btn-login-gold:hover{filter:brightness(1.05)}
+.btn-login-white{width:100%;background:linear-gradient(135deg,#0a1a4a,#1e4db7);color:#fff;padding:14px;border-radius:16px;font-weight:900;font-size:13px;margin-top:8px;box-shadow:0 6px 20px rgba(10,26,74,.3);letter-spacing:.5px}
+.btn-login-white:hover{filter:brightness(1.15)}
+.tab-btn{padding:10px;border-radius:12px;font-weight:700;font-size:13px;color:rgba(10,26,74,.5);text-align:center;transition:all .2s}
+.tab-btn.active{background:linear-gradient(135deg,#0a1a4a,#1e4db7);color:#fff;box-shadow:0 4px 12px rgba(10,26,74,.25)}
+.pbtn{border-radius:10px;padding:8px 16px;font-size:12px;font-weight:800;display:inline-flex;align-items:center;gap:6px;transition:filter .15s,background .15s,box-shadow .15s;white-space:nowrap}
+.pbtn-primary{background:linear-gradient(135deg,#0a1a4a,#1e4db7);color:#fff;box-shadow:0 2px 8px rgba(10,26,74,.2)}
+.pbtn-primary:hover{filter:brightness(1.15);box-shadow:0 4px 14px rgba(10,26,74,.3)}
+.pbtn-success{background:#10b981;color:#fff}
+.pbtn-success:hover{background:#059669}
+.pbtn-danger{background:#dc2626;color:#fff}
+.pbtn-danger:hover{background:#b91c1c}
+.pbtn-ghost{background:rgba(10,26,74,.05);color:#0a1a4a;border:1px solid rgba(10,26,74,.1)}
+.pbtn-ghost:hover{background:rgba(10,26,74,.1)}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.3px}
+.badge-online{background:rgba(16,185,129,.15);color:#10b981}
+.badge-offline{background:rgba(220,38,38,.12);color:#dc2626}
+.badge-starting{background:rgba(212,175,55,.22);color:#b8860b}
+.panel-shell{background:#f5f7ff;min-height:100vh;display:flex}
+.panel-sidebar{
+  background:linear-gradient(180deg,#ffffff 0%,#faf5e8 100%);
+  border-right:1px solid rgba(212,175,55,.25);
+  width:250px;flex-shrink:0;display:flex;flex-direction:column;
+  box-shadow:4px 0 24px rgba(10,26,74,.05);
+}
+.panel-nav-item{
+  color:rgba(10,26,74,.55);
+  border-left:3px solid transparent;
+  transition:all .15s;cursor:pointer;
+  font-size:13px;font-weight:700;padding:12px 20px;
+  display:flex;align-items:center;gap:10px;
+}
+.panel-nav-item:hover{background:rgba(212,175,55,.08);color:#0a1a4a}
+.panel-nav-item.active{
+  background:linear-gradient(90deg,rgba(212,175,55,.15),rgba(212,175,55,.02));
+  color:#b8860b;border-left-color:#d4af37;
+}
+.panel-main{flex:1;min-width:0;display:flex;flex-direction:column;background:#f5f7ff}
+.panel-topbar{
+  background:linear-gradient(90deg,#ffffff,#faf5e8);
+  border-bottom:2px solid #d4af37;
+  padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+  box-shadow:0 2px 12px rgba(10,26,74,.06);
+}
+.panel-card{background:#fff;border:1px solid rgba(10,26,74,.08);border-radius:14px;box-shadow:0 4px 16px rgba(10,26,74,.06)}
+.panel-stat{background:#fff;border:1px solid rgba(10,26,74,.08);border-radius:14px;padding:14px 18px;box-shadow:0 4px 16px rgba(10,26,74,.06);position:relative;overflow:hidden}
+.panel-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#0a1a4a,#d4af37)}
+.panel-stat-label{color:#0a1a4a;opacity:.55;font-size:10px;text-transform:uppercase;letter-spacing:.5px;font-weight:700}
+.panel-stat-value{color:#0a1a4a;font-size:15px;font-weight:900;margin-top:4px}
+.panel-tab{padding:10px 18px;font-size:13px;font-weight:700;color:rgba(10,26,74,.55);border-bottom:3px solid transparent;cursor:pointer;transition:all .15s}
+.panel-tab:hover{color:#0a1a4a}
+.panel-tab.active{color:#0a1a4a;border-bottom-color:#d4af37}
+.panel-tab-content{display:none}
+.panel-tab-content.active{display:block}
+.tab-strip{background:#fff;border-bottom:1px solid rgba(10,26,74,.1);padding:0 16px;display:flex;gap:4px;overflow-x:auto}
+.console-box{background:linear-gradient(180deg,#0a1a4a 0%,#0f2356 100%);border:1px solid rgba(212,175,55,.3);border-radius:12px;padding:14px;box-shadow:inset 0 2px 20px rgba(0,0,0,.3),0 0 0 1px rgba(212,175,55,.1)}
+.console-box pre{color:#c9d6ff;font-size:12px;line-height:1.65;white-space:pre-wrap;word-break:break-word}
+.console-box pre .ts{color:#d4af37}
+.console-box pre .ok{color:#6ee7b7}
+.console-box pre .err{color:#fca5a5}
+.ext-input-box{background:#f5f7ff;border:1px solid rgba(10,26,74,.15);border-radius:10px;padding:2px 8px;display:inline-flex;align-items:center;gap:4px}
+.ext-input-box input{background:transparent;width:52px;font-size:12px;color:#0a1a4a;border:none;outline:none;text-align:center;font-weight:700}
+.ext-input-box span{font-size:10px;color:rgba(10,26,74,.5);font-weight:700}
+.dev-credit{margin-top:24px;text-align:center;font-size:11px;color:rgba(10,26,74,.7);padding:16px 8px}
+.dev-credit-light{margin-top:24px;text-align:center;font-size:11px;color:rgba(10,26,74,.6);padding:16px 8px}
+.dev-credit a,.dev-credit-light a{
+  display:inline-flex;align-items:center;gap:5px;font-weight:900;
+  padding:8px 16px;border-radius:999px;margin-top:8px;
+  transition:filter .15s,transform .15s,box-shadow .15s;
+  background:linear-gradient(135deg,#0088cc,#00b4ff);color:#fff;
+  box-shadow:0 4px 14px rgba(0,136,204,.35);
+}
+.dev-credit a:hover,.dev-credit-light a:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,136,204,.45)}
+.tg-icon{width:14px;height:14px;display:inline-block}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(10,26,74,.15);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:rgba(10,26,74,.3)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.live-dot{animation:pulse 1.5s infinite}
+details summary{list-style:none;cursor:pointer}
+details summary::-webkit-details-marker{display:none}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+input[type=number]{-moz-appearance:textfield}
+@media(max-width:768px){
+  .panel-sidebar{width:60px}
+  .panel-sidebar .sidebar-text{display:none}
+  .panel-nav-item{padding:12px;justify-content:center}
+  .panel-nav-item span:last-child{display:none}
+  .panel-topbar{padding:10px 12px;flex-wrap:wrap;gap:8px}
+}
+</style>
+</head>
+<body>
+
+<div id="loginView" class="min-h-screen flex items-center justify-center" style="padding:24px">
+  <div style="width:100%;max-width:420px">
+    <div class="glass-blue rounded-3xl p-9">
+      <div class="bg-gold flex items-center justify-center text-black font-black text-xl" style="width:48px;height:48px;border-radius:16px">R</div>
+      <h1 class="mt-4 font-black" style="font-size:32px;color:#0a1a4a"><span class="gold" id="brandLogin">Panel-Deploy</span></h1>
+      <div class="grid mt-6 mb-6" style="grid-template-columns:1fr 1fr;gap:8px;padding:6px;background:rgba(10,26,74,.06);border-radius:16px">
+        <button id="bOwner" class="tab-btn active">Owner</button>
+        <button id="bMember" class="tab-btn">Member</button>
+      </div>
+      <div id="fOwner" style="display:flex;flex-direction:column;gap:12px">
+        <input id="u" placeholder="username" class="inp">
+        <input id="p" type="password" placeholder="password" class="inp">
+        <button id="loginOwner" class="btn-login-gold">LOGIN</button>
+      </div>
+      <div id="fMember" class="hidden" style="flex-direction:column;gap:12px">
+        <input id="tok" placeholder="PAAS-XXXXXX" class="inp" style="text-transform:uppercase;letter-spacing:2px">
+        <button id="loginMember" class="btn-login-white">LOGIN</button>
+      </div>
+      <div id="msg" class="text-xs text-center mt-4" style="color:#dc2626;min-height:14px"></div>
+    </div>
+    <div class="dev-credit">
+      <div>Developed by <b style="color:#b8860b">@pySmartDL</b></div>
+      <a href="https://t.me/pySmartDL" target="_blank" rel="noopener">
+        <svg class="tg-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>
+        Hubungi Developer
+      </a>
+    </div>
+  </div>
+</div>
+
+<div id="ownerView" class="hidden min-h-screen mx-auto p-8 max-w-5xl">
+  <div class="glass-white rounded-3xl p-6 flex justify-between items-center" style="flex-wrap:wrap;gap:12px">
+    <h1 class="font-black text-xl" style="color:#0a1a4a"><span class="gold" id="brandOwner">Panel-Deploy</span> <span class="text-xs" style="opacity:.5;font-weight:400">Owner Panel</span></h1>
+    <button onclick="logout()" class="pbtn" style="background:#0a1a4a;color:#fff;border-radius:10px;padding:8px 16px">Logout</button>
+  </div>
+
+  <div class="glass-white rounded-2xl p-5 mt-6 flex flex-wrap items-center gap-3">
+    <div class="flex items-center gap-2" style="background:linear-gradient(135deg,#0a1a4a,#1e4db7);border-radius:12px;padding:8px 12px">
+      <input id="days" type="number" value="7" min="1" max="3650" class="font-bold text-center text-white" style="background:transparent;width:70px;font-size:13px">
+      <span class="text-sm" style="color:rgba(255,255,255,.6)">hari</span>
+    </div>
+    <div class="flex gap-1 flex-wrap">
+      <button onclick="setDays(1)" class="pbtn" style="background:rgba(10,26,74,.06);color:#0a1a4a">1d</button>
+      <button onclick="setDays(7)" class="pbtn" style="background:rgba(10,26,74,.06);color:#0a1a4a">7d</button>
+      <button onclick="setDays(30)" class="pbtn" style="background:rgba(10,26,74,.06);color:#0a1a4a">30d</button>
+      <button onclick="setDays(90)" class="pbtn" style="background:rgba(10,26,74,.06);color:#0a1a4a">90d</button>
+      <button onclick="setDays(365)" class="pbtn" style="background:rgba(10,26,74,.06);color:#0a1a4a">1th</button>
+    </div>
+    <button id="gen" class="pbtn bg-blue" style="color:#fff;padding:12px 24px;font-size:13px">+ Token</button>
+    <div id="genResult" class="text-xs font-bold" style="color:#0a1a4a"></div>
+  </div>
+
+  <div class="mt-4 flex flex-wrap items-center gap-2" style="padding:0 4px">
+    <span class="text-xs font-bold" style="color:rgba(10,26,74,.5);text-transform:uppercase;letter-spacing:.5px">Preset perpanjang cepat:</span>
+    <button onclick="applyPresetAll(1)" class="pbtn" style="background:rgba(10,26,74,.08);color:#0a1a4a;padding:6px 12px">1d</button>
+    <button onclick="applyPresetAll(7)" class="pbtn" style="background:rgba(10,26,74,.08);color:#0a1a4a;padding:6px 12px">7d</button>
+    <button onclick="applyPresetAll(30)" class="pbtn" style="background:rgba(10,26,74,.08);color:#0a1a4a;padding:6px 12px">30d</button>
+    <button onclick="applyPresetAll(90)" class="pbtn" style="background:rgba(10,26,74,.08);color:#0a1a4a;padding:6px 12px">90d</button>
+    <button onclick="applyPresetAll(365)" class="pbtn" style="background:rgba(10,26,74,.08);color:#0a1a4a;padding:6px 12px">1th</button>
+  </div>
+
+  <div id="list" class="mt-4" style="display:grid;gap:8px"></div>
+
+  <div class="dev-credit-light">
+    <div>Developed by <b style="color:#b8860b">@pySmartDL</b></div>
+    <a href="https://t.me/pySmartDL" target="_blank" rel="noopener">
+      <svg class="tg-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>
+      Hubungi Developer
+    </a>
+  </div>
+</div>
+
+<div id="memberView" class="hidden panel-shell">
+
+  <aside class="panel-sidebar">
+    <div class="p-5" style="border-bottom:1px solid rgba(212,175,55,.2)">
+      <div class="flex items-center gap-2">
+        <div class="bg-gold flex items-center justify-center font-black text-black" style="width:40px;height:40px;border-radius:12px;font-size:18px">R</div>
+        <div class="sidebar-text">
+          <div class="font-black text-base" style="color:#0a1a4a"><span class="gold" id="brandSidebar">Panel-Deploy</span></div>
+          <div class="text-xs mono" style="color:rgba(10,26,74,.4)">panel v1.0</div>
+        </div>
+      </div>
+    </div>
+    <div class="p-4 sidebar-text" style="border-bottom:1px solid rgba(212,175,55,.2)">
+      <div class="text-xs font-bold" style="color:rgba(10,26,74,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Server Aktif</div>
+      <span class="badge badge-offline" id="sb-status">OFFLINE</span>
+      <div class="text-xs mono mt-2 truncate" style="color:rgba(10,26,74,.7)" id="sb-name">server</div>
+    </div>
+    <nav style="flex:1;padding:12px 0">
+      <div class="panel-nav-item active" data-tab="console"><span>🖥️</span><span>Console</span></div>
+      <div class="panel-nav-item" data-tab="startup"><span>⚙️</span><span>Startup</span></div>
+      <div class="panel-nav-item" data-tab="files"><span>📁</span><span>Files</span></div>
+      <div class="panel-nav-item" data-tab="network"><span>🌐</span><span>Network</span></div>
+    </nav>
+    <div class="p-4" style="border-top:1px solid rgba(212,175,55,.2)">
+      <button onclick="logout()" class="pbtn pbtn-danger" style="width:100%;justify-content:center">Logout</button>
+    </div>
+  </aside>
+
+  <main class="panel-main">
+    <header class="panel-topbar">
+      <div class="flex items-center gap-3">
+        <span class="text-xs font-bold" style="color:rgba(10,26,74,.5);text-transform:uppercase;letter-spacing:.5px">Server</span>
+        <span class="text-sm font-black" style="color:#0a1a4a" id="top-name">—</span>
+        <span class="badge badge-offline" id="top-status">OFFLINE</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span class="text-xs" style="color:rgba(10,26,74,.55)">⏱ <span id="sisa" class="font-black" style="color:#b8860b">—</span></span>
+      </div>
+    </header>
+
+    <div class="tab-strip">
+      <div class="panel-tab active" data-tab="console">Console</div>
+      <div class="panel-tab" data-tab="startup">Startup</div>
+      <div class="panel-tab" data-tab="files">Files</div>
+      <div class="panel-tab" data-tab="network">Network</div>
+    </div>
+
+    <section class="panel-tab-content active p-6 overflow-auto" style="flex:1" data-content="console">
+      <div class="grid mb-5" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px">
+        <div class="panel-stat"><div class="panel-stat-label">Status</div><div class="panel-stat-value" id="stat-status">—</div></div>
+        <div class="panel-stat"><div class="panel-stat-label">Expired</div><div class="panel-stat-value" style="color:#b8860b" id="stat-exp">—</div></div>
+        <div class="panel-stat"><div class="panel-stat-label">Container</div><div class="panel-stat-value" id="stat-container">—</div></div>
+        <div class="panel-stat"><div class="panel-stat-label">URL</div><div class="panel-stat-value text-xs truncate" id="stat-url">—</div></div>
+      </div>
+      <div class="flex flex-wrap gap-2 mb-4">
+        <button id="stopBtn" class="pbtn pbtn-danger">⏹ Stop</button>
+        <button id="refreshBtn" class="pbtn pbtn-ghost">↻ Refresh</button>
+        <button id="logsBtn" class="pbtn pbtn-ghost">📜 Logs</button>
+        <a id="openUrlBtn" target="_blank" class="pbtn pbtn-success hidden">🌐 Buka Web</a>
+        <label class="pbtn pbtn-ghost" style="cursor:pointer">
+          <input type="checkbox" id="liveToggle" checked style="accent-color:#d4af37">
+          <span id="liveLabel">🔴 Live</span>
+        </label>
+      </div>
+      <div class="console-box overflow-auto" id="consoleWrap" style="height:420px">
+        <pre id="logsBox">Menunggu koneksi ke server...</pre>
+      </div>
+      <div class="console-box mt-3 flex items-center gap-2" style="padding:8px 12px">
+        <span class="font-black text-sm mono" style="color:#d4af37">$</span>
+        <input id="cmdInput" placeholder="Ketik perintah... (help, status, clear)" class="flex-1 text-sm mono" style="background:transparent;border:none;color:#c9d6ff">
+      </div>
+    </section>
+
+    <section class="panel-tab-content p-6 overflow-auto" style="flex:1" data-content="startup">
+      <h2 class="text-lg font-black" style="color:#0a1a4a">⚙️ Startup Configuration</h2>
+      <p class="text-xs mb-5" style="color:rgba(10,26,74,.5)">Atur repo, environment, dan cara server dijalankan.</p>
+      <div class="panel-card p-5 mb-4">
+        <h3 class="text-sm font-black mb-3" style="color:#0a1a4a">📦 Repository</h3>
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px">
+          <div>
+            <label class="text-xs font-bold" style="color:rgba(10,26,74,.55);text-transform:uppercase">Git Repo URL</label>
+            <input id="repo" placeholder="https://github.com/user/repo" class="pinp mt-1">
+          </div>
+          <div>
+            <label class="text-xs font-bold" style="color:rgba(10,26,74,.55);text-transform:uppercase">Branch</label>
+            <input id="branch" placeholder="main" value="main" class="pinp mt-1">
+          </div>
+        </div>
+        <details class="mt-3">
+          <summary class="text-xs font-bold" style="color:rgba(10,26,74,.6)">🔐 Token GitHub (opsional — untuk private repo)</summary>
+          <div class="flex gap-2 mt-2">
+            <input id="ghp" type="password" placeholder="ghp_xxx atau github_pat_xxx" class="pinp flex-1 mono">
+            <button onclick="toggleGhpVisible()" type="button" class="pbtn pbtn-ghost">👁️</button>
+          </div>
+          <div class="text-xs mt-2" style="color:rgba(10,26,74,.5);line-height:1.5">
+            • Untuk <b>private repo</b> — buat di <a href="https://github.com/settings/tokens" target="_blank" style="text-decoration:underline">github.com/settings/tokens</a><br>
+            • Scope minimal: <code style="background:rgba(10,26,74,.1);padding:1px 4px;border-radius:4px">repo</code><br>
+            • Token <b>tidak disimpan</b> di server
+          </div>
+        </details>
+        <button id="scrapBtn" class="pbtn pbtn-primary mt-4" style="width:100%;justify-content:center">🔍 Scan Repository</button>
+      </div>
+      <div id="varsBox" class="hidden">
+        <div class="panel-card p-5">
+          <h3 class="text-sm font-black mb-3" style="color:#0a1a4a">🔑 Environment Variables</h3>
+          <div id="varsForm" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px"></div>
+        </div>
+        <div id="startCmdBox" class="panel-card p-5 mt-4 hidden">
+          <label class="text-xs font-bold" style="color:rgba(10,26,74,.55);text-transform:uppercase">Start Command <span style="font-weight:400;text-transform:none;opacity:.6">(opsional)</span></label>
+          <input id="startCmd" placeholder="auto dari Procfile" class="pinp mt-2 mono text-xs">
+        </div>
+        <button id="deployBtn" class="pbtn pbtn-success mt-4" style="width:100%;justify-content:center;padding:14px;font-size:13px">🚀 Deploy Server</button>
+      </div>
+    </section>
+
+    <section class="panel-tab-content p-6 overflow-auto" style="flex:1" data-content="files">
+      <div class="flex items-center justify-between flex-wrap gap-3 mb-4">
+        <div>
+          <h2 class="text-lg font-black" style="color:#0a1a4a">📁 File Manager</h2>
+          <p class="text-xs" style="color:rgba(10,26,74,.5)">
+            File dari container <span class="mono" id="fmContainerName" style="color:#1e4db7;font-weight:700">—</span>
+          </p>
+        </div>
+        <div class="flex gap-2 flex-wrap">
+          <button id="fmRefresh" class="pbtn pbtn-ghost">↻ Refresh</button>
+          <button id="fmNewFile" class="pbtn pbtn-ghost">📄 File Baru</button>
+          <button id="fmNewFolder" class="pbtn pbtn-ghost">📁 Folder Baru</button>
+          <button id="fmUploadBtn" class="pbtn pbtn-primary">📤 Upload</button>
+          <input type="file" id="fmUploadInput" class="hidden">
+        </div>
+      </div>
+
+      <div class="panel-card p-3 mb-3 flex items-center gap-2 flex-wrap text-xs mono" id="fmBreadcrumb" style="color:#0a1a4a">
+        <span style="opacity:.5">Path:</span>
+        <a href="#" data-path="" class="fm-crumb font-bold" style="color:#1e4db7;text-decoration:none">/app</a>
+      </div>
+
+      <div id="fmLoading" class="panel-card p-6 text-center text-xs mb-3" style="color:rgba(10,26,74,.5)">⏳ Memuat file...</div>
+      <div id="fmEmpty" class="hidden panel-card p-6 text-center text-xs mb-3" style="color:rgba(10,26,74,.5)">📭 Folder kosong</div>
+      <div id="fmError" class="hidden panel-card p-6 text-center text-xs mb-3" style="color:#dc2626"></div>
+
+      <div id="fmList" class="hidden" style="display:flex;flex-direction:column;gap:8px"></div>
+
+      <div id="fmEditorModal" class="hidden" style="position:fixed;inset:0;background:rgba(10,26,74,.75);z-index:1000;display:flex;align-items:center;justify-content:center;padding:12px">
+        <div class="panel-card" style="width:100%;max-width:900px;max-height:92vh;display:flex;flex-direction:column">
+          <div class="flex items-center justify-between p-4" style="border-bottom:1px solid rgba(10,26,74,.1);flex-wrap:wrap;gap:8px">
+            <div style="min-width:0;flex:1">
+              <div class="text-sm font-black truncate" style="color:#0a1a4a" id="fmEditorTitle">Edit File</div>
+              <div class="text-xs mono truncate" style="color:rgba(10,26,74,.5)" id="fmEditorPath">—</div>
+            </div>
+            <div class="flex gap-2">
+              <button id="fmEditorSave" class="pbtn pbtn-success">💾 Simpan</button>
+              <button id="fmEditorClose" class="pbtn pbtn-ghost">✕</button>
+            </div>
+          </div>
+          <textarea id="fmEditorContent" class="mono" style="flex:1;min-height:400px;padding:16px;background:#0a1a4a;color:#c9d6ff;border:none;outline:none;font-size:12px;line-height:1.6;resize:vertical"></textarea>
+        </div>
+      </div>
+
+      <div id="fmPreviewModal" class="hidden" style="position:fixed;inset:0;background:rgba(10,26,74,.85);z-index:1100;display:flex;align-items:center;justify-content:center;padding:12px">
+        <div class="panel-card" style="width:100%;max-width:1000px;max-height:92vh;display:flex;flex-direction:column">
+          <div class="flex items-center justify-between p-3" style="border-bottom:1px solid rgba(10,26,74,.1);flex-wrap:wrap;gap:8px">
+            <div style="min-width:0;flex:1">
+              <div class="text-sm font-black truncate" style="color:#0a1a4a" id="fmPreviewTitle">Preview</div>
+              <div class="text-xs mono truncate" style="color:rgba(10,26,74,.5)" id="fmPreviewPath">—</div>
+            </div>
+            <div class="flex gap-2">
+              <button id="fmPreviewDownload" class="pbtn pbtn-primary">⬇️</button>
+              <button id="fmPreviewClose" class="pbtn pbtn-ghost">✕</button>
+            </div>
+          </div>
+          <div id="fmPreviewBody" style="flex:1;overflow:auto;background:#0a1a4a;display:flex;align-items:center;justify-content:center;min-height:300px;max-height:75vh"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel-tab-content p-6 overflow-auto" style="flex:1" data-content="network">
+      <h2 class="text-lg font-black" style="color:#0a1a4a">🌐 Network Allocation</h2>
+      <p class="text-xs mb-5" style="color:rgba(10,26,74,.5)">Informasi alamat akses server.</p>
+      <div class="panel-card p-5">
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px">
+          <div><div class="panel-stat-label">IP Address</div><div class="text-sm mono font-bold mt-1" style="color:#0a1a4a">0.0.0.0</div></div>
+          <div><div class="panel-stat-label">Port</div><div class="text-sm mono font-bold mt-1" style="color:#0a1a4a">Auto</div></div>
+          <div><div class="panel-stat-label">Domain</div><div class="text-sm mono font-bold mt-1 truncate" style="color:#0a1a4a" id="net-domain">—</div></div>
+          <div><div class="panel-stat-label">SSL</div><div class="text-sm mono font-bold mt-1" style="color:#10b981">✓ Aktif</div></div>
+        </div>
+        <div class="console-box mt-5" style="padding:16px">
+          <div class="text-xs mb-2" style="color:rgba(255,255,255,.4)">Full URL:</div>
+          <a id="net-url" href="#" target="_blank" class="text-sm mono" style="color:#f6e27a;word-break:break-all">—</a>
+        </div>
+      </div>
+
+      <div class="dev-credit-light" style="background:#fff;border-radius:14px;padding:20px;margin-top:24px;border:1px solid rgba(212,175,55,.35);box-shadow:0 4px 16px rgba(10,26,74,.06)">
+        <div style="font-size:12px;color:rgba(10,26,74,.7)">Developed by <b style="color:#b8860b">@pySmartDL</b></div>
+        <a href="https://t.me/pySmartDL" target="_blank" rel="noopener">
+          <svg class="tg-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>
+          Hubungi Developer
+        </a>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+const API_BASE='';
+
+(async function loadAppName(){
+  try{
+    const r=await fetch('/api/config');
+    if(!r.ok)return;
+    const d=await r.json();
+    const name=d.appName||'Panel-Deploy';
+    const t=document.getElementById('pageTitle');
+    if(t)t.textContent=name;
+    ['brandLogin','brandOwner','brandSidebar'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el)el.textContent=name;
+    });
+  }catch{}
+})();
+
+bOwner.onclick=()=>{fOwner.classList.remove('hidden');fMember.classList.add('hidden');bOwner.classList.add('active');bMember.classList.remove('active')};
+bMember.onclick=()=>{fMember.classList.remove('hidden');fOwner.classList.add('hidden');bMember.classList.add('active');bOwner.classList.remove('active')};
+
+function switchTab(tab){
+  document.querySelectorAll('.panel-nav-item').forEach(n=>n.classList.toggle('active',n.dataset.tab===tab));
+  document.querySelectorAll('.panel-tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab));
+  document.querySelectorAll('.panel-tab-content').forEach(c=>c.classList.toggle('active',c.dataset.content===tab));
+  if(tab==='files')setTimeout(()=>fmLoadFiles(fmCurrentPath),100);
+}
+document.querySelectorAll('.panel-nav-item').forEach(el=>el.addEventListener('click',()=>switchTab(el.dataset.tab)));
+document.querySelectorAll('.panel-tab').forEach(el=>el.addEventListener('click',()=>switchTab(el.dataset.tab)));
+
+async function api(path,opts={}){
+  opts.headers=opts.headers||{};
+  const j=localStorage.getItem('jwt');
+  if(j)opts.headers['Authorization']='Bearer '+j;
+  if(opts.body&&typeof opts.body!=='string'){opts.headers['Content-Type']='application/json';opts.body=JSON.stringify(opts.body)}
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),30000);
+  try{
+    const r=await fetch(API_BASE+path,{...opts,signal:controller.signal});
+    clearTimeout(timeout);
+    if(r.status===401){localStorage.clear();location.reload();return{}}
+    let d;
+    try{d=await r.json()}catch{d={error:'Server error'}}
+    if(!r.ok)throw d;
+    return d;
+  }catch(e){
+    clearTimeout(timeout);
+    if(e.name==='AbortError')throw{error:'Request timeout (>30 detik)'};
+    throw e.error?e:{error:'Koneksi gagal'};
+  }
+}
+
+function toggleGhpVisible(){const el=document.getElementById('ghp');el.type=el.type==='password'?'text':'password'}
+function setDays(n){document.getElementById('days').value=n}
+
+loginOwner.onclick=async()=>{
+  msg.innerText='Loading...';msg.style.color='#1e4db7';
+  try{
+    const d=await api('/api/owner/login',{method:'POST',body:{username:u.value,password:p.value}});
+    localStorage.setItem('jwt',d.jwt);
+    localStorage.setItem('role','owner');
+    loginView.classList.add('hidden');
+    ownerView.classList.remove('hidden');
+    loadTokens();
+    msg.innerText='';
+  }catch(e){msg.style.color='#dc2626';msg.innerText=e.error||'Login gagal'}
+};
+
+loginMember.onclick=async()=>{
+  msg.innerText='Loading...';msg.style.color='#1e4db7';
+  try{
+    const d=await api('/api/member/login',{method:'POST',body:{token:tok.value.toUpperCase()}});
+    localStorage.setItem('jwt',d.jwt);
+    localStorage.setItem('role','member');
+    loginView.classList.add('hidden');
+    memberView.classList.remove('hidden');
+    checkStatus();
+    startLive();
+    msg.innerText='';
+  }catch(e){msg.style.color='#dc2626';msg.innerText=e.error||'Login gagal'}
+};
+
+gen.onclick=async()=>{
+  const daysVal=parseInt(document.getElementById('days').value)||7;
+  if(daysVal<1)return alert('Minimal 1 hari');
+  if(daysVal>3650)return alert('Maksimal 3650 hari');
+  genResult.innerText='Loading...';
+  try{
+    const d=await api('/api/owner/generate-token',{method:'POST',body:{days:daysVal}});
+    genResult.innerText='OK: '+d.token;
+    loadTokens();
+  }catch(e){genResult.innerText='ERR: '+(e.error||'Gagal')}
+};
+
+async function loadTokens(){
+  try{
+    const data=await api('/api/owner/tokens');
+    list.innerHTML=data.map(t=>`
+      <div class="glass-white rounded-2xl p-4 text-sm" style="color:#0a1a4a">
+        <div class="flex justify-between items-center flex-wrap gap-3">
+          <div class="flex items-center gap-2 flex-wrap">
+            <b class="mono text-base">${t.token}</b>
+            <button onclick="copyToken('${t.token}', this)" class="pbtn" style="background:#0a1a4a;color:#fff;padding:4px 8px;font-size:10px">Salin</button>
+          </div>
+          <div class="flex gap-1 items-center flex-wrap">
+            <div class="ext-input-box">
+              <input type="number" min="1" max="3650" value="7" id="ext-${t.token}">
+              <span>hari</span>
+            </div>
+            <button onclick="extendTokCustom('${t.token}', this)" class="pbtn pbtn-success">+ Tambah</button>
+            <button onclick="deleteTok('${t.token}')" class="pbtn pbtn-danger">hapus</button>
+          </div>
+        </div>
+        <div class="text-xs mt-2 flex flex-wrap gap-3" style="opacity:.6">
+          <span>${t.sisa}</span>
+          <span>${t.container?'Online: '+t.containerStatus:'Belum deploy'}</span>
+          <span>Multi-device</span>
+        </div>
+      </div>
+    `).join('')||'<div class="text-center p-8" style="color:rgba(10,26,74,.5)">Belum ada token</div>';
+  }catch(e){list.innerHTML='<div class="text-red p-4">'+(e.error||'Gagal load')+'</div>'}
+}
+
+async function extendTokCustom(token,btnEl){
+  const input=document.getElementById('ext-'+token);
+  if(!input)return alert('Input tidak ditemukan');
+  const days=parseInt(input.value)||0;
+  if(days<1)return alert('Minimal 1 hari');
+  if(days>3650)return alert('Maksimal 3650 hari');
+  if(!confirm(`Tambah ${days} hari untuk token ${token}?`))return;
+  const btn=btnEl||event?.target;
+  const origText=btn?btn.innerText:'';
+  const origBg=btn?btn.style.background:'';
+  if(btn){btn.innerText='...';btn.disabled=true}
+  try{
+    await api(`/api/owner/extend/${token}`,{method:'POST',body:{days}});
+    if(btn){btn.innerText=`OK +${days} hari`;btn.style.background='#059669'}
+    setTimeout(()=>loadTokens(),700);
+  }catch(e){
+    alert('ERR: '+(e.error||'Gagal extend'));
+    if(btn){btn.innerText=origText;btn.style.background=origBg;btn.disabled=false}
+  }
+}
+
+function applyPresetAll(days){
+  const inputs=document.querySelectorAll('input[id^="ext-"]');
+  if(!inputs.length)return alert('Belum ada token');
+  inputs.forEach(input=>{input.value=days});
+  const btn=event?.target;
+  if(btn){
+    const orig=btn.innerText;
+    const origBg=btn.style.background;
+    btn.innerText='OK '+days+'d';
+    btn.style.background='#10b981';
+    btn.style.color='#fff';
+    setTimeout(()=>{btn.innerText=orig;btn.style.background=origBg;btn.style.color='#0a1a4a'},900);
+  }
+}
+
+async function copyToken(token,btn){
+  try{
+    if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(token);
+    else{
+      const ta=document.createElement('textarea');
+      ta.value=token;ta.style.position='fixed';ta.style.left='-9999px';
+      document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    }
+    const orig=btn.innerText;
+    btn.innerText='Tersalin';btn.style.background='#10b981';
+    setTimeout(()=>{btn.innerText=orig;btn.style.background='#0a1a4a'},1500);
+  }catch(e){prompt('Salin token manual:',token)}
+}
+
+async function deleteTok(t){
+  if(!confirm('Hapus token '+t+'?'))return;
+  try{await api(`/api/owner/delete/${t}`,{method:'POST'});loadTokens()}
+  catch(e){alert('ERR: '+(e.error||'Gagal'))}
+}
+
+scrapBtn.onclick=async()=>{
+  if(!repo.value)return alert('Isi URL repo dulu');
+  scrapBtn.innerText='Scanning...';scrapBtn.disabled=true;
+  try{
+    const d=await api('/api/member/scrap',{method:'POST',body:{repo:repo.value,branch:branch.value||'main',ghp:ghp.value||''}});
+    if(!d.ok)throw{error:d.error||'Scrap gagal'};
+    const privateTag=d.isPrivate
+      ?'<span style="color:#059669;font-size:9px;margin-left:8px;font-weight:700">private</span>'
+      :'<span style="color:#2563eb;font-size:9px;margin-left:8px;font-weight:700">public</span>';
+    let html=`
+      <div style="grid-column:1/-1;padding:12px;background:#f5f7ff;border-radius:12px;border:1px solid rgba(10,26,74,.1)">
+        <div class="text-xs font-black mb-2" style="color:#0a1a4a">Info Repo ${privateTag}</div>
+        <div class="text-xs mono" style="color:rgba(10,26,74,.8);line-height:1.6">
+          <div>Runtime: <b>${d.runtime}</b></div>
+          <div>Start: <b>${d.startCmd||'-'}</b></div>
+          ${d.name?`<div>Nama: ${d.name}</div>`:''}
+          ${d.description?`<div>Deskripsi: ${d.description}</div>`:''}
+        </div>
+      </div>`;
+    const envKeys=Object.keys(d.env||{});
+    if(envKeys.length){
+      html+=`<div style="grid-column:1/-1;font-size:11px;font-weight:900;color:#0a1a4a;margin-top:8px">Environment Variables (${envKeys.length})</div>`;
+      html+=envKeys.map(k=>{
+        const v=d.env[k];
+        const badge=v.required?'<span style="color:#dc2626">*</span>':'';
+        const escapedVal=String(v.value||'').replace(/"/g,'&quot;');
+        return `
+          <div>
+            <label style="font-size:10px;font-weight:700;color:#0a1a4a" class="mono">${k} ${badge}</label>
+            ${v.description?`<div style="font-size:9px;color:rgba(10,26,74,.5);margin-bottom:4px">${v.description}</div>`:''}
+            <input data-k="${k}" value="${escapedVal}" placeholder="${v.value?'(sudah terisi)':'isi value...'}" class="pinp mono text-xs">
+          </div>`;
+      }).join('');
+    }
+    varsForm.innerHTML=html;
+    varsBox.classList.remove('hidden');
+    startCmdBox.classList.remove('hidden');
+    startCmd.value=d.startCmd||'';
+  }catch(e){alert('ERR: '+(e.error||'Gagal scrap'))}
+  scrapBtn.innerText='Scan Repository';
+  scrapBtn.disabled=false;
+};
+
+deployBtn.onclick=async()=>{
+  deployBtn.innerText='Deploying... (bisa 1-3 menit)';
+  deployBtn.disabled=true;
+  const env={};
+  document.querySelectorAll('[data-k]').forEach(i=>{if(i.value)env[i.dataset.k]=i.value});
+  try{
+    await api('/api/member/deploy',{
+      method:'POST',
+      body:{repo:repo.value,branch:branch.value||'main',ghp:ghp.value||'',env,startCmd:startCmd.value}
+    });
+    appendConsole('Deploy sukses. Container jalan.','ok');
+    appendConsole('Tunggu install selesai - cek log di console.','');
+    setTimeout(()=>checkStatus(),3000);
+  }catch(e){appendConsole('ERR: '+(e.error||'Deploy gagal'),'err')}
+  deployBtn.innerText='Deploy Server';
+  deployBtn.disabled=false;
+};
+
+function setBadge(el,status){
+  const s=(status||'').toLowerCase();
+  el.className='badge';
+  if(s.includes('run')||s.includes('online')||s==='active'){el.classList.add('badge-online');el.innerText='ONLINE'}
+  else if(s.includes('start')||s.includes('pending')){el.classList.add('badge-starting');el.innerText='STARTING'}
+  else{el.classList.add('badge-offline');el.innerText='OFFLINE'}
+}
+
+function appendConsole(text,cls){
+  const box=document.getElementById('logsBox');
+  if(!box)return;
+  const t=new Date().toLocaleTimeString('id-ID',{hour12:false});
+  if(box.textContent==='Menunggu koneksi ke server...')box.innerHTML='';
+  box.innerHTML+=(box.innerHTML?'\n':'')+`<span class="ts">[${t}]</span> <span class="${cls||''}">${text}</span>`;
+  const wrap=document.getElementById('consoleWrap');
+  wrap.scrollTop=wrap.scrollHeight;
+}
+
+function renderLogs(raw){
+  const box=document.getElementById('logsBox');
+  const wrap=document.getElementById('consoleWrap');
+  const lines=String(raw).split('\n').map(line=>{
+    const t=new Date().toLocaleTimeString('id-ID',{hour12:false});
+    let cls='';
+    const low=line.toLowerCase();
+    if(low.includes('error')||low.includes('fail'))cls='err';
+    else if(low.includes('success')||low.includes('listening')||low.includes('started'))cls='ok';
+    return `<span class="ts">[${t}]</span> <span class="${cls}">${line.replace(/[<>]/g,'')}</span>`;
+  });
+  box.innerHTML=lines.join('\n');
+  wrap.scrollTop=wrap.scrollHeight;
+}
+
+async function checkStatus(){
+  try{const j=await api('/api/member/status');applyStatus(j)}
+  catch(e){document.getElementById('stat-status').innerText='error'}
+}
+async function checkStatusSilent(){try{const j=await api('/api/member/status');applyStatus(j)}catch{}}
+
+function applyStatus(j){
+  document.getElementById('sisa').innerText=j.sisa||'—';
+  document.getElementById('top-name').innerText=j.name||'server';
+  document.getElementById('sb-name').innerText=j.name||'server';
+  setBadge(document.getElementById('top-status'),j.status);
+  setBadge(document.getElementById('sb-status'),j.status);
+  document.getElementById('stat-status').innerText=j.status||'—';
+  document.getElementById('stat-exp').innerText=j.sisa||'—';
+  document.getElementById('stat-container').innerText=j.container?'aktif':'belum';
+  document.getElementById('stat-url').innerText=j.url?'tersedia':'—';
+  if(j.url){
+    document.getElementById('net-domain').innerText=(()=>{try{return new URL(j.url).hostname}catch{return '—'}})();
+    const a=document.getElementById('net-url');a.href=j.url;a.innerText=j.url;
+  }
+  const btn=document.getElementById('openUrlBtn');
+  if(j.url){btn.href=j.url;btn.classList.remove('hidden')}
+  else btn.classList.add('hidden');
+}
+
+logsBtn.onclick=async()=>{
+  try{
+    const j=await api('/api/member/logs');
+    const logs=j.logs||'(kosong)';
+    lastLogsLength=logs.length;
+    renderLogs(logs);
+  }catch(e){document.getElementById('logsBox').innerText='ERR: '+(e.error||'Gagal')}
+};
+
+let liveInterval=null;
+let lastLogsLength=0;
+let liveFlip=false;
+
+function startLive(){
+  if(liveInterval)clearInterval(liveInterval);
+  liveInterval=setInterval(async()=>{
+    const t=document.getElementById('liveToggle');
+    if(!t||!t.checked)return;
+    if(!localStorage.getItem('jwt'))return;
+    if(localStorage.getItem('role')!=='member')return;
+    if(liveFlip){try{await checkStatusSilent()}catch{}}
+    else{try{await loadLogsSilent()}catch{}}
+    liveFlip=!liveFlip;
+  },8000);
+  const label=document.getElementById('liveLabel');
+  if(label)label.innerHTML='<span class="live-dot">Live</span>';
+}
+function stopLive(){
+  if(liveInterval)clearInterval(liveInterval);
+  liveInterval=null;
+  const label=document.getElementById('liveLabel');
+  if(label)label.textContent='Off';
+}
+async function loadLogsSilent(){
+  try{
+    const j=await api('/api/member/logs');
+    const logs=j.logs||'(kosong)';
+    if(logs.length!==lastLogsLength){lastLogsLength=logs.length;renderLogs(logs)}
+  }catch{}
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  const t=document.getElementById('liveToggle');
+  if(t)t.addEventListener('change',()=>{if(t.checked)startLive();else stopLive()});
+  const cmd=document.getElementById('cmdInput');
+  if(cmd){
+    cmd.addEventListener('keydown',(e)=>{
+      if(e.key==='Enter'&&cmd.value.trim()){
+        const v=cmd.value.trim();
+        appendConsole('$ '+v,'');
+        if(v==='clear')document.getElementById('logsBox').innerHTML='';
+        else if(v==='help')appendConsole('Perintah: help, status, clear','ok');
+        else if(v==='status')appendConsole('Status: '+document.getElementById('stat-status').innerText,'ok');
+        else appendConsole('Perintah tidak dikenal. Ketik "help".','err');
+        cmd.value='';
+      }
+    });
+  }
+});
+
+let fmCurrentPath='';
+
+function fmFormatSize(bytes){
+  if(!bytes)return '0 B';
+  const units=['B','KB','MB','GB'];
+  let i=0,n=bytes;
+  while(n>=1024&&i<units.length-1){n/=1024;i++}
+  return n.toFixed(n>=10||i===0?0:1)+' '+units[i];
+}
+function fmEscape(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function fmEncPath(p){return encodeURIComponent(String(p||'')).replace(/'/g,'%27')}
+function fmEl(id){return document.getElementById(id)}
+function fmShow(which){
+  ['fmLoading','fmEmpty','fmError','fmList'].forEach(x=>{const el=fmEl(x);if(el)el.classList.add('hidden')});
+  fmEl(which).classList.remove('hidden');
+}
+
+const FM_IMG_EXT=['jpg','jpeg','png','gif','webp','svg','bmp','ico'];
+const FM_VID_EXT=['mp4','webm','ogg','mov'];
+const FM_AUD_EXT=['mp3','wav','m4a','flac'];
+const FM_TXT_EXT=['txt','json','js','ts','jsx','tsx','py','go','rb','php','java','c','cpp','h','css','html','yml','yaml','xml','sh','bash','md','env','ini','conf','log'];
+
+function fmExt(name){return (String(name).split('.').pop()||'').toLowerCase()}
+function fmIsPreviewable(name){
+  const e=fmExt(name);
+  return FM_IMG_EXT.includes(e)||FM_VID_EXT.includes(e)||FM_AUD_EXT.includes(e)||e==='pdf';
+}
+function fmIsText(name){
+  const e=fmExt(name);
+  return FM_TXT_EXT.includes(e)||!e;
+}
+function fmIconFor(name){
+  const e=fmExt(name);
+  if(FM_IMG_EXT.includes(e))return '🖼️';
+  if(FM_VID_EXT.includes(e))return '🎬';
+  if(FM_AUD_EXT.includes(e))return '🎵';
+  if(e==='pdf')return '📕';
+  if(['zip','tar','gz','rar','7z'].includes(e))return '🗜️';
+  if(FM_TXT_EXT.includes(e))return '📄';
+  return '📎';
+}
+
+function fmRenderBreadcrumb(relPath){
+  const bc=fmEl('fmBreadcrumb');
+  const parts=relPath?relPath.split('/').filter(Boolean):[];
+  let html=`<span style="opacity:.5">Path:</span> <a href="#" data-path="" class="fm-crumb font-bold" style="color:#1e4db7;text-decoration:none">/app</a>`;
+  let acc='';
+  for(const p of parts){
+    acc+=(acc?'/':'')+p;
+    html+=` <span style="opacity:.4">/</span> <a href="#" data-path="${fmEscape(acc)}" class="fm-crumb font-bold" style="color:#1e4db7;text-decoration:none">${fmEscape(p)}</a>`;
+  }
+  bc.innerHTML=html;
+  bc.querySelectorAll('.fm-crumb').forEach(a=>{
+    a.addEventListener('click',(e)=>{
+      e.preventDefault();
+      fmLoadFiles(a.dataset.path||'');
+    });
+  });
+}
+
+async function fmLoadFiles(relPath=''){
+  fmCurrentPath=relPath||'';
+  fmRenderBreadcrumb(fmCurrentPath);
+  fmShow('fmLoading');
+  try{
+    const d=await api('/api/member/files/list?path='+encodeURIComponent(fmCurrentPath));
+    if(!d.ok)throw{error:d.error||'Gagal load'};
+    if(d.container)fmEl('fmContainerName').innerText=d.container;
+    fmRenderFiles(d.items||[]);
+  }catch(e){
+    fmEl('fmError').innerText='ERR: '+(e.error||'Gagal load file');
+    fmShow('fmError');
+  }
+}
+
+function fmRenderFiles(items){
+  if(!items.length){fmShow('fmEmpty');return}
+  const list=fmEl('fmList');
+
+  list.innerHTML=items.map(it=>{
+    const rel=fmCurrentPath?(fmCurrentPath+'/'+it.name):it.name;
+    const enc=fmEncPath(rel);
+    const icon=it.isDir?'📁':fmIconFor(it.name);
+    const nameHtml=fmEscape(it.name);
+
+    let actions='';
+    if(it.isDir){
+      actions=`
+        <button type="button" class="pbtn pbtn-primary" onclick="fmAct('open','${enc}')">Buka</button>
+        <button type="button" class="pbtn pbtn-ghost" onclick="fmAct('rename','${enc}')">Rename</button>
+        <button type="button" class="pbtn pbtn-danger" onclick="fmAct('delete','${enc}')">Hapus</button>`;
+    }else{
+      const previewBtn=fmIsPreviewable(it.name)
+        ?`<button type="button" class="pbtn pbtn-primary" onclick="fmAct('preview','${enc}')">Lihat</button>`:'';
+      const editBtn=fmIsText(it.name)
+        ?`<button type="button" class="pbtn pbtn-ghost" onclick="fmAct('edit','${enc}')">Edit</button>`:'';
+      actions=`
+        ${previewBtn}${editBtn}
+        <button type="button" class="pbtn pbtn-ghost" onclick="fmAct('download','${enc}')">Download</button>
+        <button type="button" class="pbtn pbtn-ghost" onclick="fmAct('rename','${enc}')">Rename</button>
+        <button type="button" class="pbtn pbtn-danger" onclick="fmAct('delete','${enc}')">Hapus</button>`;
+    }
+
+    return `
+      <div class="panel-card" style="padding:12px 14px">
+        <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
+          <div style="font-size:22px;line-height:1">${icon}</div>
+          <div style="flex:1;min-width:0">
+            <div style="color:#0a1a4a;font-weight:700;font-size:13px;word-break:break-word">${nameHtml}</div>
+            <div style="color:rgba(10,26,74,.55);font-size:11px;margin-top:2px;font-family:ui-monospace,monospace">
+              ${it.isDir?'folder':fmFormatSize(it.size)} | ${fmEscape(it.date||'')}
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">${actions}</div>
+      </div>`;
+  }).join('');
+  fmShow('fmList');
+}
+
+window.fmAct=function(act,encPath){
+  let p='';
+  try{p=decodeURIComponent(encPath||'')}catch{p=''}
+  if(act==='open')return fmLoadFiles(p);
+  if(act==='edit')return fmEditFile(p);
+  if(act==='preview')return fmPreview(p);
+  if(act==='download')return fmDownload(p);
+  if(act==='rename')return fmRename(p);
+  if(act==='delete')return fmDelete(p);
+};
+
+async function fmEditFile(relPath){
+  try{
+    const d=await api('/api/member/files/read?path='+encodeURIComponent(relPath));
+    if(!d.ok)throw{error:d.error||'Gagal baca'};
+    if(d.binary){alert('File biner - pakai tombol Lihat atau Download.');return}
+    fmEl('fmEditorTitle').innerText='Edit: '+relPath.split('/').pop();
+    fmEl('fmEditorPath').innerText='/app/'+relPath;
+    fmEl('fmEditorContent').value=d.content||'';
+    fmEl('fmEditorContent').dataset.path=relPath;
+    fmEl('fmEditorModal').classList.remove('hidden');
+  }catch(e){alert('ERR: '+(e.error||'Gagal baca'))}
+}
+
+function fmPreview(relPath){
+  const e=fmExt(relPath);
+  const tk=localStorage.getItem('jwt');
+  const url='/api/member/files/raw?tk='+encodeURIComponent(tk)+'&path='+encodeURIComponent(relPath);
+
+  fmEl('fmPreviewTitle').innerText=relPath.split('/').pop();
+  fmEl('fmPreviewPath').innerText='/app/'+relPath;
+  fmEl('fmPreviewDownload').onclick=()=>fmDownload(relPath);
+
+  const body=fmEl('fmPreviewBody');
+  body.innerHTML='<div style="color:#c9d6ff;font-size:12px">Memuat...</div>';
+
+  setTimeout(()=>{
+    body.innerHTML='';
+    if(FM_IMG_EXT.includes(e)){
+      const img=document.createElement('img');
+      img.src=url;
+      img.style.maxWidth='100%';img.style.maxHeight='72vh';img.style.objectFit='contain';
+      img.onerror=()=>{body.innerHTML='<div style="color:#fca5a5;font-size:12px">Gagal memuat gambar</div>'};
+      body.appendChild(img);
+    }else if(FM_VID_EXT.includes(e)){
+      const v=document.createElement('video');
+      v.src=url;v.controls=true;
+      v.style.maxWidth='100%';v.style.maxHeight='72vh';
+      v.onerror=()=>{body.innerHTML='<div style="color:#fca5a5;font-size:12px">Gagal memuat video</div>'};
+      body.appendChild(v);
+    }else if(FM_AUD_EXT.includes(e)){
+      const wrap=document.createElement('div');
+      wrap.style.width='80%';
+      wrap.innerHTML=`<div style="color:#c9d6ff;font-size:12px;text-align:center;margin-bottom:12px">${fmEscape(relPath.split('/').pop())}</div>`;
+      const a=document.createElement('audio');
+      a.src=url;a.controls=true;a.style.width='100%';
+      wrap.appendChild(a);body.appendChild(wrap);
+    }else if(e==='pdf'){
+      const iframe=document.createElement('iframe');
+      iframe.src=url;
+      iframe.style.width='100%';iframe.style.height='72vh';
+      iframe.style.border='none';iframe.style.background='#fff';
+      body.appendChild(iframe);
+    }else{
+      body.innerHTML='<div style="color:#fca5a5;font-size:12px">Tipe file ini tidak bisa dipreview</div>';
+    }
+  },30);
+
+  fmEl('fmPreviewModal').classList.remove('hidden');
+}
+
+async function fmDownload(relPath){
+  try{
+    const token=localStorage.getItem('jwt');
+    const url='/api/member/files/download?path='+encodeURIComponent(relPath);
+    const r=await fetch(url,{headers:{Authorization:'Bearer '+token}});
+    if(!r.ok)throw new Error('Download gagal');
+    const blob=await r.blob();
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download=relPath.split('/').pop();
+    document.body.appendChild(a);a.click();a.remove();
+    URL.revokeObjectURL(a.href);
+  }catch(e){alert('ERR: '+e.message)}
+}
+
+async function fmDelete(relPath){
+  if(!confirm('Hapus "'+relPath+'"?'))return;
+  try{
+    const d=await api('/api/member/files/delete',{method:'POST',body:{path:relPath}});
+    if(!d.ok)throw{error:d.error};
+    fmLoadFiles(fmCurrentPath);
+  }catch(e){alert('ERR: '+(e.error||'Gagal hapus'))}
+}
+
+async function fmRename(relPath){
+  const oldName=relPath.split('/').pop();
+  const newName=prompt('Nama baru:',oldName);
+  if(!newName||newName===oldName)return;
+  const parent=relPath.substring(0,relPath.length-oldName.length);
+  const newRel=parent+newName;
+  try{
+    const d=await api('/api/member/files/rename',{method:'POST',body:{from:relPath,to:newRel}});
+    if(!d.ok)throw{error:d.error};
+    fmLoadFiles(fmCurrentPath);
+  }catch(e){alert('ERR: '+(e.error||'Gagal rename'))}
+}
+
+(function fmInit(){
+  const bind=(id,ev,fn)=>{const el=fmEl(id);if(el)el.addEventListener(ev,fn)};
+
+  bind('fmRefresh','click',()=>fmLoadFiles(fmCurrentPath));
+
+  bind('fmNewFile','click',async()=>{
+    const name=prompt('Nama file baru:');
+    if(!name)return;
+    const full=fmCurrentPath?(fmCurrentPath+'/'+name):name;
+    try{
+      const d=await api('/api/member/files/create',{method:'POST',body:{path:full,type:'file'}});
+      if(!d.ok)throw{error:d.error};
+      fmLoadFiles(fmCurrentPath);
+    }catch(e){alert('ERR: '+(e.error||'Gagal'))}
+  });
+
+  bind('fmNewFolder','click',async()=>{
+    const name=prompt('Nama folder baru:');
+    if(!name)return;
+    const full=fmCurrentPath?(fmCurrentPath+'/'+name):name;
+    try{
+      const d=await api('/api/member/files/create',{method:'POST',body:{path:full,type:'folder'}});
+      if(!d.ok)throw{error:d.error};
+      fmLoadFiles(fmCurrentPath);
+    }catch(e){alert('ERR: '+(e.error||'Gagal'))}
+  });
+
+  bind('fmUploadBtn','click',()=>fmEl('fmUploadInput').click());
+  bind('fmUploadInput','change',async(e)=>{
+    const file=e.target.files[0];
+    if(!file)return;
+    const target=fmCurrentPath?(fmCurrentPath+'/'+file.name):file.name;
+    try{
+      const token=localStorage.getItem('jwt');
+      const r=await fetch('/api/member/files/upload?path='+encodeURIComponent(target),{
+        method:'POST',
+        headers:{Authorization:'Bearer '+token,'Content-Type':'application/octet-stream'},
+        body:file
+      });
+      if(!r.ok){const err=await r.json().catch(()=>({error:'Upload gagal'}));throw err}
+      fmLoadFiles(fmCurrentPath);
+    }catch(err){alert('ERR: '+(err.error||'Upload gagal'))}
+    e.target.value='';
+  });
+
+  bind('fmEditorSave','click',async()=>{
+    const rel=fmEl('fmEditorContent').dataset.path;
+    const content=fmEl('fmEditorContent').value;
+    try{
+      const d=await api('/api/member/files/write',{method:'POST',body:{path:rel,content}});
+      if(!d.ok)throw{error:d.error};
+      fmEl('fmEditorModal').classList.add('hidden');
+      fmLoadFiles(fmCurrentPath);
+    }catch(e){alert('ERR: '+(e.error||'Gagal simpan'))}
+  });
+  bind('fmEditorClose','click',()=>fmEl('fmEditorModal').classList.add('hidden'));
+  bind('fmEditorContent','keydown',(e)=>{
+    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){
+      e.preventDefault();
+      fmEl('fmEditorSave').click();
+    }
+  });
+
+  bind('fmPreviewClose','click',()=>{
+    fmEl('fmPreviewModal').classList.add('hidden');
+    fmEl('fmPreviewBody').innerHTML='';
+  });
+  document.addEventListener('keydown',(e)=>{
+    if(e.key==='Escape'&&fmEl('fmPreviewModal')&&!fmEl('fmPreviewModal').classList.contains('hidden')){
+      fmEl('fmPreviewClose').click();
+    }
+  });
+})();
+
+stopBtn.onclick=async()=>{
+  if(!confirm('Yakin stop container?'))return;
+  try{await api('/api/member/stop',{method:'POST'});appendConsole('Stop dikirim ke server...','err');checkStatus()}
+  catch(e){alert('ERR: '+(e.error||'Gagal'))}
+};
+refreshBtn.onclick=()=>{checkStatus();logsBtn.click()};
+
+function logout(){
+  if(!confirm('Yakin logout?'))return;
+  stopLive();
+  localStorage.clear();sessionStorage.clear();
+  document.cookie.split(";").forEach(c=>{
+    document.cookie=c.replace(/^ +/,"").replace(/=.*/,"=;expires="+new Date().toUTCString()+";path=/");
+  });
+  location.reload();
+}
+
+(function autoLogin(){
+  const j=localStorage.getItem('jwt');
+  const role=localStorage.getItem('role');
+  if(!j)return;
+  try{
+    const payload=JSON.parse(atob(j.split('.')[1]));
+    if(payload.exp&&payload.exp*1000<Date.now()){localStorage.clear();return}
+    loginView.classList.add('hidden');
+    if(role==='owner'||payload.role==='owner'){
+      ownerView.classList.remove('hidden');loadTokens();
+    }else{
+      memberView.classList.remove('hidden');checkStatus();startLive();
+    }
+  }catch{localStorage.clear()}
+})();
+</script>
+</body>
+</html>
